@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [validCredentials, setValidCredentials] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+   
+    fetch(process.env.PUBLIC_URL + '/login.json')
+      .then((response) => response.json())
+      .then((data) => setValidCredentials(data))
+      .catch((error) => console.error('Error loading credentials:', error));
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Kiểm tra thông tin đăng nhập (giả sử username là "admin" và password là "123456")
-    if (username === 'admin' && password === '123456') {
+    // Kiểm tra thông tin đăng nhập từ file JSON
+    if (validCredentials && username === validCredentials.username && password === validCredentials.password) {
       localStorage.setItem('isLoggedIn', 'true');
       navigate('/admin_page/dashboard');
     } else {
