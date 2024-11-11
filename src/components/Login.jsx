@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -6,27 +6,27 @@ function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [validCredentials, setValidCredentials] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-   
-    fetch(process.env.PUBLIC_URL + '/login.json')
-      .then((response) => response.json())
-      .then((data) => setValidCredentials(data))
-      .catch((error) => console.error('Error loading credentials:', error));
-  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Kiểm tra thông tin đăng nhập từ file JSON
-    if (validCredentials && username === validCredentials.username && password === validCredentials.password) {
+  
+    // Lấy thông tin đăng nhập từ file .env
+    const validUsername = process.env.REACT_APP_USERNAME;
+    const validPassword = process.env.REACT_APP_PASSWORD;
+  
+    console.log('Username from .env:', validUsername); // In ra username từ .env
+    console.log('Password from .env:', validPassword); // In ra password từ .env
+  
+    // Kiểm tra thông tin đăng nhập từ .env
+    if (username === validUsername && password === validPassword) {
       localStorage.setItem('isLoggedIn', 'true');
       navigate('/admin_page/dashboard');
     } else {
       setError('Invalid username or password');
     }
   };
+  
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
