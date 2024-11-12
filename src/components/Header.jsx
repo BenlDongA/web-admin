@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Header = () => (
   <Navbar bg="light" expand="lg" className="justify-content-between">
-    <Navbar.Brand as={Link} to="/">Benl Travel App</Navbar.Brand>
+    <Navbar.Brand as={Link} to="/">Benl Travel Ap</Navbar.Brand>
     <Form className="d-flex">
       <FormControl type="text" placeholder="Search" className="mr-2" />
       <Button variant="outline-primary">Search</Button>
