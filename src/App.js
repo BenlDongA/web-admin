@@ -18,7 +18,7 @@ function App() {
         {/* Route login */}
         <Route path="/login" element={<Login />} />
 
-     
+        {/* Private route for /admin_page */}
         <Route
           path="/admin_page/*"
           element={

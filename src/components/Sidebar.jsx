@@ -22,7 +22,7 @@ const Sidebar = () => (
   </Nav>
   <div className="text-center">
     <img 
-      src="applogo.png" 
+      src="https://img.upanh.tv/2024/11/12/applogo.png" 
       alt="Logo" 
       className="logo-img"
     />

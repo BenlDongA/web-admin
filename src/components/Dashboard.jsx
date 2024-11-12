@@ -51,10 +51,10 @@ const Dashboard = () => {
         <Col md={3}>
           <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
             <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/6194/6194068.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px' }} />
+              <img src="https://cdn-icons-png.flaticon.com/512/6194/6194068.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px',  }} />
               <div>
                 <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                  Saved to Wishlist Tours
+                 Wishlist Tours
                 </Card.Text>
                 <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
                   220
@@ -68,7 +68,7 @@ const Dashboard = () => {
         <Col md={3}>
           <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
             <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="travel-bag.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px' }} />
+              <img src="https://i.pinimg.com/736x/f8/8c/93/f88c9387ee7eb7d094feb28d96b1b471.jpg" alt="icon" style={{ width: '60px', height: '60px', marginRight: '20px' }} />
               <div>
                 <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
                   Upcoming Tours
@@ -85,7 +85,7 @@ const Dashboard = () => {
         <Col md={3}>
           <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
             <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="plan.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px' }} />
+              <img src="https://i.pinimg.com/736x/85/03/b6/8503b63f0ee64478067d99a190cf19bf.jpg" alt="icon" style={{ width: '50px', height: '50px', marginRight: '25px' }} />
               <div>
                 <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
                   New Tours
