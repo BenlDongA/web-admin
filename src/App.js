@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
@@ -8,7 +7,7 @@ import TripList from './components/TripList';
 import UserManager from './components/UserManager';
 import Login from './components/Login';
 import PrivateRoute from './components/PrivateRoute';
-
+import HomeList from './components/homelist'; // Import HomeList instead of HomeCard
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -33,7 +32,7 @@ function App() {
                       <Route path="dashboard" element={<Dashboard />} />
                       <Route path="trip" element={<TripList />} />
                       <Route path="users" element={<UserManager />} />
-                      {/* Redirect /admin_page to /admin_page/dashboard */}
+                      <Route path="home" element={<HomeList />} /> {/* Use HomeList here */}
                       <Route path="" element={<Navigate to="dashboard" />} />
                     </Routes>
                   </div>
@@ -43,7 +42,7 @@ function App() {
           }
         />
 
-        {/* Redirect tất cả đường dẫn không tồn tại về login */}
+        {/* Redirect all non-existent routes to login */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

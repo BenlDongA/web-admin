@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
 import TripCard from './TripCard';
-import { FaPlus } from 'react-icons/fa'; // Icon for the Create button
+import { FaPlus } from 'react-icons/fa';
 
 const TripList = () => {
   const [trips, setTrips] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State to control the modal
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     avatar: '',
@@ -14,28 +14,27 @@ const TripList = () => {
     duration: '',
     solike: '',
     date: '',
-  }); // State to hold the form data
-  const [editingTripId, setEditingTripId] = useState(null); // Track which trip is being edited
+  });
+  const [editingTripId, setEditingTripId] = useState(null);
+  const [priceFilter, setPriceFilter] = useState(null);
+  const [dateFilter, setDateFilter] = useState(null); // New state for date filter
 
-  // Fetch trips when the component mounts
   useEffect(() => {
     axios.get('https://api-flutter-nper.onrender.com/api/trip')
       .then((response) => {
-        setTrips(response.data);  
+        setTrips(response.data);
       })
       .catch((error) => {
         console.error("Error fetching trips:", error);
       });
-  }, []);  // Empty dependency to only run once on mount
+  }, []);
 
   const handleCreateTrip = () => {
-    // Open the modal
-    setEditingTripId(null); // Set null to signify creating a new trip
+    setEditingTripId(null);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
-    // Close the modal
     setShowModal(false);
   };
 
@@ -50,25 +49,23 @@ const TripList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingTripId) {
-      // If editing an existing trip, update it
       axios.put(`https://api-flutter-nper.onrender.com/api/trip/${editingTripId}`, formData)
         .then((response) => {
           const updatedTrips = trips.map((trip) => 
             trip._id === editingTripId ? response.data : trip
           );
           setTrips(updatedTrips);
-          setShowModal(false); // Close modal
+          setShowModal(false);
           alert("Trip updated successfully!");
         })
         .catch((error) => {
           console.error("Error updating trip:", error.response || error.message);
         });
     } else {
-      // If creating a new trip, submit as a new entry
       axios.post('https://api-flutter-nper.onrender.com/api/trip', formData)
         .then((response) => {
           setTrips([...trips, response.data]);
-          setShowModal(false); // Close modal
+          setShowModal(false);
           alert("Trip created successfully!");
         })
         .catch((error) => {
@@ -78,10 +75,8 @@ const TripList = () => {
   };
 
   const handleDelete = (id) => {
-    // Gọi API để xóa chuyến đi
     axios.delete(`https://api-flutter-nper.onrender.com/api/trip/${id}`)
       .then(() => {
-        // Cập nhật lại trạng thái trips bằng cách loại bỏ chuyến đi đã xóa
         setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== id));
       })
       .catch((error) => {
@@ -103,35 +98,55 @@ const TripList = () => {
     setShowModal(true);
   };
 
-  // Render trips only if it's not an empty array or undefined
-  if (!Array.isArray(trips)) {
-    console.error("Trips data is not in the expected array format", trips);
-    return <div>Failed to load trips. Please try again later.</div>;
-  }
+  const filteredTrips = trips.filter((trip) => {
+    if (priceFilter === 'above' && trip.price <= 10) return false;
+    if (priceFilter === 'below' && trip.price > 10) return false;
+    if (dateFilter && trip.date.slice(0, 10) !== dateFilter) return false; // Filter by date
+    return true;
+  });
 
   return (
     <Container>
-      {/* Create Button */}
-      <div className="d-flex justify-content-end mb-3">
+      <div className="d-flex justify-content-between mb-3">
+        {/* Filter Dropdown */}
+        <Dropdown>
+          <Dropdown.Toggle variant="primary" id="dropdown-basic">
+            Filter by Price
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => setPriceFilter('above')}>Above $10</Dropdown.Item>
+            <Dropdown.Item onClick={() => setPriceFilter('below')}>Below $10</Dropdown.Item>
+            <Dropdown.Item onClick={() => setPriceFilter(null)}>All</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+
+        {/* Date Picker */}
+        <Form.Control
+          type="date"
+          value={dateFilter || ''}
+          onChange={(e) => setDateFilter(e.target.value)}
+          style={{ maxWidth: '200px' }}
+        />
+
+        {/* Create Button */}
         <Button variant="success" onClick={handleCreateTrip}>
           <FaPlus className="me-2" /> Create Trip
         </Button>
       </div>
 
-      {/* List of trips */}
       <Row>
-        {trips.length > 0 ? trips.map((trip) => (
+        {filteredTrips.length > 0 ? filteredTrips.map((trip) => (
           <Col md={4} key={trip._id}>
             <TripCard
-              tripId={trip._id} // Pass the tripId here
+              tripId={trip._id}
               image={trip.avatar}
               title={trip.name}
               price={trip.price}
               duration={trip.duration}
               likes={trip.solike}
               date={trip.date ? trip.date.slice(0, 10) : ''}
-              onDelete={handleDelete} // Pass onDelete function
-              onEdit={handleEdit} // Pass onEdit function to handle editing
+              onDelete={handleDelete}
+              onEdit={handleEdit}
             />
           </Col>
         )) : <p>No trips available.</p>}
@@ -154,7 +169,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formAvatar">
               <Form.Label>Image URL</Form.Label>
               <Form.Control
@@ -165,7 +179,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formPrice">
               <Form.Label>Price</Form.Label>
               <Form.Control
@@ -176,7 +189,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formDuration">
               <Form.Label>Duration (days)</Form.Label>
               <Form.Control
@@ -187,7 +199,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formSolike">
               <Form.Label>Likes</Form.Label>
               <Form.Control
@@ -198,7 +209,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formDate">
               <Form.Label>Date</Form.Label>
               <Form.Control
@@ -209,7 +219,6 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-
             <Button variant="primary" type="submit" className="mt-3">
               {editingTripId ? 'Update Trip' : 'Create Trip'}
             </Button>

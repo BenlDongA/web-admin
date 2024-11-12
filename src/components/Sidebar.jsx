@@ -16,7 +16,7 @@ const Sidebar = () => (
     <NavLink to="/admin_page/users" className="nav-link" activeClassName="active">
       <FaUsers className="me-2" /> Users Manager
     </NavLink>
-    <NavLink to="/admin_page/homcard" className="nav-link" activeClassName="active">
+    <NavLink to="/admin_page/home" className="nav-link" activeClassName="active">
       <FaHome className="me-2" /> Home-Card
     </NavLink>
   </Nav>
