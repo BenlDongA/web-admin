@@ -13,8 +13,7 @@
     
       const validUsername = process.env.REACT_APP_USERNAME;
       const validPassword = process.env.REACT_APP_PASSWORD;
-      console.log('Username from .env:', process.env.REACT_APP_USERNAME); 
-      console.log('Password from .env:', process.env.REACT_APP_PASSWORD);
+    
       
       if (username === validUsername && password === validPassword) {
         sessionStorage.setItem('isLoggedIn', 'true');
