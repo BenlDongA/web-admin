@@ -11,16 +11,11 @@ function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
   
-    // Lấy thông tin đăng nhập từ file .env
     const validUsername = process.env.REACT_APP_USERNAME;
     const validPassword = process.env.REACT_APP_PASSWORD;
   
-    console.log('Username from .env:', validUsername); // In ra username từ .env
-    console.log('Password from .env:', validPassword); // In ra password từ .env
-  
-    // Kiểm tra thông tin đăng nhập từ .env
     if (username === validUsername && password === validPassword) {
-      localStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('isLoggedIn', 'true');
       navigate('/admin_page/dashboard');
     } else {
       setError('Invalid username or password');
