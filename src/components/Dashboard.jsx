@@ -1,34 +1,93 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
+import { RxDashboard } from "react-icons/rx";
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
-
-// Registering necessary components for Chart.js
+import './ds.css'
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const Dashboard = () => {
+  const chartRef = useRef(null);
+
+  // Set up the data with gradient border directly
   const data = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // months
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
         label: 'Booked Tours',
-        data: [120, 150, 100, 300, 250, 190, 210, 180, 230, 160, 280, 320], // number of tours booked each month
-        fill: false,
-        borderColor: 'rgba(0, 255, 255, 0.7)',
-        tension: 0.1,
+        data: [120, 150, 100, 300, 250, 190, 210, 180, 230, 160, 280, 320],
+        fill: true,
+        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+        borderColor: chartRef.current
+          ? (() => {
+              const ctx = chartRef.current.ctx;
+              const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+              gradient.addColorStop(0, 'rgba(0, 255, 255, 0.7)');
+              gradient.addColorStop(1, 'rgba(0, 123, 255, 0)');
+              return gradient;
+            })()
+          : 'rgba(0, 255, 255, 0.7)', // fallback color
+        pointBorderColor: 'rgba(0, 123, 255, 1)',
+        pointBackgroundColor: 'rgba(0, 123, 255, 1)',
+        pointHoverRadius: 8,
+        tension: 0.4,
       },
     ],
   };
 
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: false,  // Ensures the chart is not constrained by aspect ratio
-    aspectRatio: 2,  // Makes the chart shorter (you can adjust this value as needed)
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: '#333',
+          font: {
+            size: 14,
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: '#333',
+          font: {
+            size: 12,
+          },
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        ticks: {
+          color: '#333',
+          font: {
+            size: 12,
+          },
+        },
+        grid: {
+          color: 'rgba(200, 200, 200, 0.2)',
+        },
+      },
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    hover: {
+      mode: 'nearest',
+      intersect: true,
+    },
   };
+
+
 
   return (
     <div className="container mt-0">
-      <h2 style={{ marginBottom: '0px', paddingTop: '0px' }}>Dashboard</h2>
+      <h2 style={{ marginBottom: '20px', paddingTop: '0px' }}> <RxDashboard style={{marginRight:10, marginTop: -7}}/>Dashboard </h2>
       <Row className="mb-4">
         {/* Total Tours Card */}
         <Col md={3}>
@@ -99,12 +158,11 @@ const Dashboard = () => {
         </Col>
       </Row>
 
-      {/* Line Chart for Booked Tours */}
       <Card>
         <Card.Body>
           <Card.Title>Booked Tours</Card.Title>
-          <div style={{ height: '300px' }}> {/* Adjust height of the chart container */}
-            <Line data={data} options={chartOptions} />
+          <div style={{ height: '350px' }}>
+            <Line ref={chartRef} data={data} options={chartOptions} />
           </div>
         </Card.Body>
       </Card>

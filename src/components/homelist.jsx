@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
 import Select from 'react-select';
 import HomeCard from './home_card';
+import { FaPlus  } from 'react-icons/fa';
 
 const HomeList = () => {
   const [homes, setHomes] = useState([]);
@@ -181,7 +182,7 @@ const HomeList = () => {
     <Container>
       <div className="d-flex justify-content-between mb-3">
         <Button variant="success" onClick={handleCreateHome}>
-          Add New Home
+        <FaPlus className="me-2" />Add new card
         </Button>
       </div>
 
@@ -199,8 +200,8 @@ const HomeList = () => {
         <Col md={6}>
           <Form.Label>Filter by Country</Form.Label>
           <Select
-            options={[{ label: 'All', value: 'All' }, ...countries]}  // Add 'All' option
-            value={countries.find(option => option.value === formData.countryName) || { label: 'All', value: 'All' }}  // Default to 'All' if no country selected
+            options={[{ label: 'All', value: 'All' }, ...countries]} 
+            value={countries.find(option => option.value === formData.countryName) || { label: 'All', value: 'All' }}  
             onChange={handleCountryFilterChange}
             isClearable={true}
           />
@@ -226,7 +227,7 @@ const HomeList = () => {
       {/* Modal for creating or editing a home */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{editingHomeId ? 'Edit Home' : 'Create New Home'}</Modal.Title>
+          <Modal.Title>{editingHomeId ? 'Edit Home' : 'Create New Card'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>

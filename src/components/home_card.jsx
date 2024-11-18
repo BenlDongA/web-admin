@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
-
+import {FaEdit, FaTrash, } from 'react-icons/fa';
 const HomeCard = ({ homeId, image, title, price, duration, onDelete, onEdit }) => {
   return (
     <Card className="mb-4">
@@ -19,12 +19,15 @@ const HomeCard = ({ homeId, image, title, price, duration, onDelete, onEdit }) =
         <Card.Text>
           {price} | {duration}
         </Card.Text>
-        <Button variant="primary" onClick={() => onEdit(homeId)}>
-          Edit
-        </Button>
-        <Button variant="danger" onClick={() => onDelete(homeId)} className="ml-2">
-          Delete
-        </Button>
+        <Button   
+    variant="outline-warning"   
+    onClick={() => onEdit(homeId)}   
+    style={{ marginRight: '8px' }}>  
+    <FaEdit className="me-1" /> Edit  
+</Button>  
+<Button variant="outline-danger" onClick={() => onDelete(homeId)}>   
+    <FaTrash className="me-1" /> Delete  
+</Button>
       </Card.Body>
     </Card>
   );

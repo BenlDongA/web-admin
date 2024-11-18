@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaMapMarkedAlt, FaUsers, FaHome } from 'react-icons/fa'; // Import icons
+import { FaTachometerAlt, FaMapMarkedAlt, FaUsers, FaHome, FaCog } from 'react-icons/fa'; // Import icons
 import './siba.css'
 const Sidebar = () => (
   <div className="sidebar">
@@ -18,6 +18,9 @@ const Sidebar = () => (
     </NavLink>
     <NavLink to="/admin_page/home" className="nav-link" activeClassName="active">
       <FaHome className="me-2" /> Home-Card
+    </NavLink>
+    <NavLink to="/admin_page/setting" className="nav-link" activeClassName="active">
+      <FaCog className="me-2" /> Setting
     </NavLink>
   </Nav>
   <div className="text-center">

@@ -4,25 +4,27 @@ import { FaStar, FaEdit, FaTrash, FaThumbsUp, FaCalendarAlt, FaClock } from 'rea
 import axios from 'axios';
 import './siba.css';
 
-const TripCard = ({ image, title, price, duration, likes, date, tripId, onDelete, onEdit }) => {
+const TripCard = ({ image, title, price, duration, likes, date, tripId, onDelete, onEdit, countryName  }) => {
   const handleDelete = () => {
-    console.log("Deleting trip with ID:", tripId);  // Log ID
+    console.log("Deleting trip with ID:", tripId);
     axios.delete(`https://api-flutter-nper.onrender.com/api/trip/${tripId}`)
       .then(response => {
         console.log('Trip deleted:', response.data);
-        alert("Delete successfully");
+        alert("Trip deleted successfully!");
         if (onDelete) {
-          onDelete(tripId);
+          onDelete(tripId); // Chỉ gọi hàm onDelete từ TripList
         }
       })
       .catch(error => {
         console.error('Error deleting trip:', error);
       });
   };
+  
+  
 
   const handleEdit = () => {
     if (onEdit) {
-      onEdit(tripId); // Call onEdit with the tripId to handle editing
+      onEdit(tripId); 
     }
   };
 
@@ -35,8 +37,8 @@ const TripCard = ({ image, title, price, duration, likes, date, tripId, onDelete
         alt={title}
       />
       <Card.Body>
-        <Card.Title>
-          {title}
+      <Card.Title>
+          {title} <span className="text-muted">- {countryName}</span>
           <span className="ms-2 text-warning">
             <FaStar />
           </span>
@@ -60,8 +62,8 @@ const TripCard = ({ image, title, price, duration, likes, date, tripId, onDelete
             <FaEdit className="me-1" /> Edit
           </Button>
           <Button variant="outline-danger" onClick={handleDelete}>
-            <FaTrash className="me-1" /> Delete
-          </Button>
+          <FaTrash className="me-1" /> Delete
+        </Button>
         </div>
       </Card.Body>
     </Card>

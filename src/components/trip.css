@@ -1,0 +1,52 @@
+/* Style for the price filter slider */
+.slider {
+    width: 120%;
+    height: 10px;
+    background: #0029f5;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 5px rgba(79, 249, 0, 0.1);
+  }
+  
+  .slider-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    margin-top: -5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: 2px solid #3300ff;
+  }
+  
+  .slider-thumb:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+  }
+  
+  /* Track styles */
+  .slider-track {
+    height: 10px;
+    background: #e0e0e0; /* Màu xám cho phần ngoài */
+    border-radius: 8px;
+  }
+  
+  .slider-track-middle {
+    background: #007bff; /* Màu xanh cho phần giữa hai nút */
+    border-radius: 8px;
+  }
+  .price-range-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-top: 0px;
+    letter-spacing: 0.5px;
+    
+    /* Styling the box */
+    border: 2px solid #007bff; /* Viền xanh */
+    background-color: #fff; /* Nền trắng */
+    padding: 10px; /* Khoảng cách bên trong */
+    border-radius: 8px; /* Bo góc cho box */
+    display: inline-block; /* Để box có kích thước vừa với nội dung */
+  }

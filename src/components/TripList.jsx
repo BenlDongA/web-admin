@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button, Modal, Form, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Button, Modal, Form} from 'react-bootstrap';
 import TripCard from './TripCard';
 import { FaPlus } from 'react-icons/fa';
-
+import Select from 'react-select';
+import ReactSlider from 'react-slider';
+import { BsCashCoin } from "react-icons/bs";
+import './trip.css'
+import { FaFilterCircleDollar } from "react-icons/fa6";
 const TripList = () => {
   const [trips, setTrips] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -14,10 +19,12 @@ const TripList = () => {
     duration: '',
     solike: '',
     date: '',
+    countryName: '', 
   });
   const [editingTripId, setEditingTripId] = useState(null);
-  const [priceFilter, setPriceFilter] = useState(null);
-  const [dateFilter, setDateFilter] = useState(null); // New state for date filter
+  const [priceRange, setPriceRange] = useState([0, 200]); // State for price range
+  const [dateFilter, setDateFilter] = useState(null);
+  const [countryFilter, setCountryFilter] = useState(null);
 
   useEffect(() => {
     axios.get('https://api-flutter-nper.onrender.com/api/trip')
@@ -27,10 +34,33 @@ const TripList = () => {
       .catch((error) => {
         console.error("Error fetching trips:", error);
       });
-  }, []);
+    axios.get('https://restcountries.com/v3.1/all')
+      .then((response) => {
+        const countryOptions = [
+          { value: null, label: 'All' },
+          ...response.data.map((country) => ({
+            value: country.name.common,
+            label: country.name.common,
+          })),
+        ];
+        setCountries(countryOptions);
+      })
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, [trips]);
 
   const handleCreateTrip = () => {
     setEditingTripId(null);
+    setFormData({
+      name: '',
+      avatar: '',
+      price: '',
+      duration: '',
+      solike: '',
+      date: '',
+      countryName: '',
+    });
     setShowModal(true);
   };
 
@@ -46,6 +76,16 @@ const TripList = () => {
     });
   };
 
+  const handleCountryChange = (selectedOption) => {
+    setFormData({
+      ...formData,
+      countryName: selectedOption ? selectedOption.value : '',
+    });
+  };
+  const handleCountryFilterChange = (selectedOption) => {
+    setCountryFilter(selectedOption ? selectedOption.value : null);
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingTripId) {
@@ -62,7 +102,7 @@ const TripList = () => {
           console.error("Error updating trip:", error.response || error.message);
         });
     } else {
-      axios.post('https://api-flutter-nper.onrender.com/api/trip', formData)
+      axios.post('https://api-flutter-nper.onrender.com/api/trip', [formData])
         .then((response) => {
           setTrips([...trips, response.data]);
           setShowModal(false);
@@ -70,18 +110,9 @@ const TripList = () => {
         })
         .catch((error) => {
           console.error("Error creating trip:", error.response || error.message);
+          alert(error.response?.data?.message || "An error occurred while creating the trip");
         });
     }
-  };
-
-  const handleDelete = (id) => {
-    axios.delete(`https://api-flutter-nper.onrender.com/api/trip/${id}`)
-      .then(() => {
-        setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== id));
-      })
-      .catch((error) => {
-        console.error("Error deleting trip:", error);
-      });
   };
 
   const handleEdit = (tripId) => {
@@ -93,42 +124,81 @@ const TripList = () => {
       duration: tripToEdit.duration,
       solike: tripToEdit.solike,
       date: tripToEdit.date,
+      countryName: tripToEdit.countryName, 
     });
     setEditingTripId(tripId);
     setShowModal(true);
   };
 
+  const handleDelete = (id) => {
+    axios.delete(`https://api-flutter-nper.onrender.com/api/trip/${id}`)
+      .then(() => {
+        setTrips(prevTrips => prevTrips.filter(trip => trip._id !== id));
+        alert("Trip deleted successfully!");
+      })
+      .catch((error) => {
+        console.error("Error deleting trip:", error);
+      });
+  };
+
   const filteredTrips = trips.filter((trip) => {
-    if (priceFilter === 'above' && trip.price <= 10) return false;
-    if (priceFilter === 'below' && trip.price > 10) return false;
-    if (dateFilter && trip.date.slice(0, 10) !== dateFilter) return false; // Filter by date
+    if (trip.price < priceRange[0] || trip.price > priceRange[1]) return false;
+    if (dateFilter && trip.date.slice(0, 10) !== dateFilter) return false;
+    if (countryFilter && trip.countryName !== countryFilter) return false;
+
     return true;
   });
-
+  const handlePriceRangeChange = (value) => setPriceRange(value);
   return (
     <Container>
-      <div className="d-flex justify-content-between mb-3">
-        {/* Filter Dropdown */}
-        <Dropdown>
-          <Dropdown.Toggle variant="primary" id="dropdown-basic">
-            Filter by Price
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => setPriceFilter('above')}>Above $10</Dropdown.Item>
-            <Dropdown.Item onClick={() => setPriceFilter('below')}>Below $10</Dropdown.Item>
-            <Dropdown.Item onClick={() => setPriceFilter(null)}>All</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-
-        {/* Date Picker */}
+      <div className="d-flex justify-content-between mb-3 align-items-center">
+      <div>
+      <h5><FaFilterCircleDollar style={{marginRight:10}} />Filter by Price</h5>
+      <ReactSlider
+        className="slider"
+        thumbClassName="slider-thumb"
+        trackClassName="slider-track"
+        value={priceRange}
+        onChange={handlePriceRangeChange}
+        min={0}
+        max={200}
+        step={1}
+        renderTrack={(props, state) => {
+          // Tạo track cho từng phần: ngoài và giữa
+          const trackClass =
+            state.index === 1 ? "slider-track-middle" : "slider-track";
+          return <div {...props} className={trackClass} />;
+        }}
+      />
+      <div className="price-range-text">
+      <BsCashCoin style={{fontSize:20, fontWeight: 'bold'}}/> ${priceRange[0]} - ${priceRange[1]}
+      </div>
+    </div>
+        
         <Form.Control
           type="date"
           value={dateFilter || ''}
           onChange={(e) => setDateFilter(e.target.value)}
           style={{ maxWidth: '200px' }}
         />
-
-        {/* Create Button */}
+        <Select
+          options={countries}
+          value={countries.find(option => option.value === countryFilter)}
+          onChange={handleCountryFilterChange}
+          isClearable={true}
+          placeholder="Filter by Country"
+          styles={{
+            menu: (base) => ({
+              ...base,
+              maxHeight: 200,
+              overflowY: 'auto',
+            }),
+            control: (base) => ({
+              ...base,
+              width: 200,
+            }),
+          }}
+        />
         <Button variant="success" onClick={handleCreateTrip}>
           <FaPlus className="me-2" /> Create Trip
         </Button>
@@ -145,6 +215,7 @@ const TripList = () => {
               duration={trip.duration}
               likes={trip.solike}
               date={trip.date ? trip.date.slice(0, 10) : ''}
+              countryName={trip.countryName} 
               onDelete={handleDelete}
               onEdit={handleEdit}
             />
@@ -152,7 +223,6 @@ const TripList = () => {
         )) : <p>No trips available.</p>}
       </Row>
 
-      {/* Modal for creating or editing a trip */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>{editingTripId ? 'Edit Trip' : 'Create New Trip'}</Modal.Title>
@@ -167,6 +237,16 @@ const TripList = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
+              />
+            </Form.Group>
+            <Form.Group controlId="formCountryName">
+              <Form.Label>Country Name</Form.Label>
+              <Select
+                options={countries}
+                value={countries.find(option => option.value === formData.countryName)}
+                onChange={handleCountryChange}
+                isClearable={true}
+                placeholder="Select a country"
               />
             </Form.Group>
             <Form.Group controlId="formAvatar">
@@ -199,7 +279,7 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-            <Form.Group controlId="formSolike">
+            <Form.Group controlId="formLikes">
               <Form.Label>Likes</Form.Label>
               <Form.Control
                 type="number"
@@ -219,7 +299,7 @@ const TripList = () => {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3">
+            <Button variant="primary" type="submit">
               {editingTripId ? 'Update Trip' : 'Create Trip'}
             </Button>
           </Form>
