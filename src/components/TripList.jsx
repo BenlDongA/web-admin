@@ -12,6 +12,8 @@ const TripList = () => {
   const [trips, setTrips] = useState([]);
   const [countries, setCountries] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [startDateFilter, setStartDateFilter] = useState(null);
+const [endDateFilter, setEndDateFilter] = useState(null); 
   const [formData, setFormData] = useState({
     name: '',
     avatar: '',
@@ -23,7 +25,6 @@ const TripList = () => {
   });
   const [editingTripId, setEditingTripId] = useState(null);
   const [priceRange, setPriceRange] = useState([0, 200]); // State for price range
-  const [dateFilter, setDateFilter] = useState(null);
   const [countryFilter, setCountryFilter] = useState(null);
 
   useEffect(() => {
@@ -143,7 +144,10 @@ const TripList = () => {
 
   const filteredTrips = trips.filter((trip) => {
     if (trip.price < priceRange[0] || trip.price > priceRange[1]) return false;
-    if (dateFilter && trip.date.slice(0, 10) !== dateFilter) return false;
+    const tripDate = new Date(trip.date.slice(0, 10));
+    if (startDateFilter && new Date(startDateFilter) > tripDate) return false;
+    if (endDateFilter && new Date(endDateFilter) < tripDate) return false;
+
     if (countryFilter && trip.countryName !== countryFilter) return false;
 
     return true;
@@ -174,13 +178,28 @@ const TripList = () => {
       <BsCashCoin style={{fontSize:20, fontWeight: 'bold'}}/> ${priceRange[0]} - ${priceRange[1]}
       </div>
     </div>
-        
-        <Form.Control
-          type="date"
-          value={dateFilter || ''}
-          onChange={(e) => setDateFilter(e.target.value)}
-          style={{ maxWidth: '200px' }}
-        />
+    <div className="date-filter-container d-flex align-items-center">
+  <div className="me-3 d-flex align-items-center">
+    <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Start Date:</span>
+    <Form.Control
+      type="date"
+      value={startDateFilter || ''}
+      onChange={(e) => setStartDateFilter(e.target.value)}
+      style={{ maxWidth: '160px' }}
+    />
+  </div>
+  <div className="d-flex align-items-center">
+    <span style={{ fontWeight: 'bold', marginRight: '5px' }}>End Date:</span>
+    <Form.Control
+      type="date"
+      value={endDateFilter || ''}
+      onChange={(e) => setEndDateFilter(e.target.value)}
+      style={{ maxWidth: '160px' }}
+    />
+  </div>
+</div>
+
+
         <Select
           options={countries}
           value={countries.find(option => option.value === countryFilter)}
