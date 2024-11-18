@@ -144,9 +144,9 @@ const [endDateFilter, setEndDateFilter] = useState(null);
 
   const filteredTrips = trips.filter((trip) => {
     if (trip.price < priceRange[0] || trip.price > priceRange[1]) return false;
-    const tripDate = new Date(trip.date.slice(0, 10));
-    if (startDateFilter && new Date(startDateFilter) > tripDate) return false;
-    if (endDateFilter && new Date(endDateFilter) < tripDate) return false;
+    const tripDate = trip.date ? new Date(trip.date.slice(0, 10)) : null;
+    if (tripDate && startDateFilter && new Date(startDateFilter) > tripDate) return false;
+    if (tripDate && endDateFilter && new Date(endDateFilter) < tripDate) return false;
 
     if (countryFilter && trip.countryName !== countryFilter) return false;
 
