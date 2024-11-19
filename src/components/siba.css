@@ -3,14 +3,15 @@
     width: 260px; /* Cố định chiều rộng */
     background: linear-gradient(84deg, #1763ad, #8e9dab); /* Nền gradient */
     color: #fff;
-    height: 100vh;  /* Đảm bảo chiều cao bằng chiều cao màn hình */
+    height: 100vh; /* Chiều cao bằng chiều cao màn hình */
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    position: sticky; /* Giữ sidebar luôn cố định */
-    top: 0; /* Đảm bảo sidebar dính lên trên */
-    z-index: 10; /* Đảm bảo sidebar luôn nằm trên */
+    position: sticky; /* Sidebar luôn cố định khi cuộn */
+    top: 0; /* Sidebar dính lên trên */
+    z-index: 10; /* Luôn nằm trên các thành phần khác */
+    box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng kích thước */
 }
 
 /* Tiêu đề sidebar */
@@ -31,13 +32,14 @@
     align-items: center;
     height: 50px;
     transition: color 0.3s ease, background 0.3s ease;
+    text-decoration: none;
+    border-radius: 8px;
 }
 
 .nav-link:hover,
 .nav-link.active {
     color: #ecf0f1 !important;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
 }
 
 /* Logo */
@@ -57,7 +59,7 @@
 .main-content-wrapper {
     display: flex;
     height: 100vh;
-    overflow: hidden; /* Prevents sidebar from scrolling */
+    overflow: hidden; /* Ngăn sidebar cuộn */
 }
 
 /* List card container */
@@ -65,11 +67,88 @@
     flex: 1;
     height: 100%;
     overflow-y: auto; /* Cho phép cuộn phần list card */
-    padding-right: 10px; /* Optional padding for spacing */
-    margin-left: 260px; /* Đảm bảo list card không bị che khuất bởi sidebar */
+    padding: 20px;
+    margin-left: 260px; /* Đảm bảo list card không bị che bởi sidebar */
+    box-sizing: border-box; /* Đảm bảo padding không gây tràn */
 }
+
+/* Thẻ Trip card */
+.trip-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
 .trip-card-img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-  }
+}
+
+/* Nội dung trong trip card */
+.trip-card-content {
+    padding: 15px;
+}
+
+.trip-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.trip-card-description {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* Responsive Design */
+
+/* Màn hình nhỏ hơn 768px (tablet hoặc điện thoại) */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 220px; /* Thu nhỏ sidebar */
+        padding: 15px;
+    }
+
+    .list-card-container {
+        margin-left: 220px; /* Cập nhật margin tương ứng */
+        padding: 10px;
+    }
+
+    .trip-card-img {
+        height: 150px; /* Giảm chiều cao ảnh */
+    }
+}
+
+/* Màn hình nhỏ hơn 480px (điện thoại) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%; /* Sidebar chiếm toàn bộ chiều ngang */
+        height: auto;
+        position: relative; /* Không dính khi cuộn */
+    }
+
+    .list-card-container {
+        margin-left: 0; /* Xóa margin */
+        padding: 10px;
+    }
+
+    .trip-card {
+        margin-bottom: 15px;
+    }
+
+    .trip-card-img {
+        height: 120px; /* Ảnh nhỏ hơn */
+    }
+}

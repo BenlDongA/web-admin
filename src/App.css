@@ -21,7 +21,9 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  padding: 20px;
   color: white;
+  box-sizing: border-box; /* Đảm bảo padding không làm ảnh hưởng kích thước */
 }
 
 .App-link {
@@ -36,11 +38,52 @@
     transform: rotate(360deg);
   }
 }
+
 .sidebar {
   width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Khoảng cách giữa các mục */
+  padding: 15px;
+  box-sizing: border-box; /* Đảm bảo padding không gây tràn */
 }
 
 .nav-link.active {
   color: #ff5733;
   font-weight: bold;
+}
+
+/* Responsive Design */
+
+/* Màn hình nhỏ hơn 768px (tablet hoặc điện thoại) */
+@media (max-width: 768px) {
+  .App-header {
+    font-size: calc(8px + 2vmin);
+    padding: 15px;
+  }
+
+  .sidebar {
+    width: 100%; /* Sidebar chiếm toàn bộ chiều ngang */
+    text-align: center;
+  }
+
+  .App-logo {
+    height: 30vmin; /* Logo nhỏ hơn trên màn hình nhỏ */
+  }
+}
+
+/* Màn hình nhỏ hơn 480px (điện thoại) */
+@media (max-width: 480px) {
+  .App-logo {
+    height: 25vmin; /* Logo nhỏ hơn trên điện thoại */
+  }
+
+  .App-header {
+    font-size: calc(6px + 2vmin);
+    padding: 10px;
+  }
+
+  .sidebar {
+    gap: 10px; /* Giảm khoảng cách giữa các mục */
+  }
 }

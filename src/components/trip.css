@@ -1,6 +1,6 @@
 /* Style for the price filter slider */
 .slider {
-    width: 120%;
+    width: 100%;
     height: 10px;
     background: #0029f5;
     border-radius: 8px;
@@ -50,3 +50,35 @@
     border-radius: 8px; /* Bo góc cho box */
     display: inline-block; /* Để box có kích thước vừa với nội dung */
   }
+  /* Đảm bảo khoảng cách giữa các cột */
+.row {
+  margin: 0 -15px; /* Loại bỏ khoảng trống không mong muốn */
+}
+
+.col {
+  padding: 15px; /* Thêm khoảng cách giữa các cột */
+}
+
+/* Mặc định (lớn hơn 1200px) */
+@media (min-width: 1200px) {
+  .col {
+    flex: 0 0 33.333%; /* Hiển thị 3 cột */
+    max-width: 33.333%;
+  }
+}
+
+/* Từ 700px đến 1200px (màn hình trung bình) */
+@media (min-width: 700px) and (max-width: 1199px) {
+  .col {
+    flex: 0 0 50%; /* Hiển thị 2 cột */
+    max-width: 50%;
+  }
+}
+
+/* Dưới 700px (màn hình nhỏ) */
+@media (max-width: 699px) {
+  .col {
+    flex: 0 0 100%; /* Hiển thị 1 cột */
+    max-width: 100%;
+  }
+}

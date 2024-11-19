@@ -89,74 +89,90 @@ const Dashboard = () => {
     <div className="container mt-0">
       <h2 style={{ marginBottom: '20px', paddingTop: '0px' }}> <RxDashboard style={{marginRight:10, marginTop: -7}}/>Dashboard </h2>
       <Row className="mb-4">
-        {/* Total Tours Card */}
-        <Col md={3}>
-          <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
-            <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/6213/6213814.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px' }} />
-              <div>
-                <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                  Total Tours
-                </Card.Text>
-                <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
-                  356
-                </h3>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
+  {/* Total Tours Card */}
+  <Col xs={12} sm={6} md={3}>
+    <Card className="text-center bg-light border rounded p-3 shadow card-hover">
+      <Card.Body className="d-flex align-items-center justify-content-center">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/6213/6213814.png"
+          alt="icon"
+          style={{ width: '50px', height: '50px', marginRight: '20px' }}
+        />
+        <div>
+          <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
+            Total Tours
+          </Card.Text>
+          <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
+            356
+          </h3>
+        </div>
+      </Card.Body>
+    </Card>
+  </Col>
 
-        {/* Saved to Wishlist Tours Card */}
-        <Col md={3}>
-          <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
-            <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://cdn-icons-png.flaticon.com/512/6194/6194068.png" alt="icon" style={{ width: '50px', height: '50px', marginRight: '20px',  }} />
-              <div>
-                <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                 Wishlist Tours
-                </Card.Text>
-                <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
-                  220
-                </h3>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
+  {/* Wishlist Tours Card */}
+  <Col xs={12} sm={6} md={3}>
+    <Card className="text-center bg-light border rounded p-3 shadow card-hover">
+      <Card.Body className="d-flex align-items-center justify-content-center">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/6194/6194068.png"
+          alt="icon"
+          style={{ width: '50px', height: '50px', marginRight: '20px' }}
+        />
+        <div>
+          <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
+            Wishlist Tours
+          </Card.Text>
+          <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
+            220
+          </h3>
+        </div>
+      </Card.Body>
+    </Card>
+  </Col>
 
-        {/* Upcoming Tours Card */}
-        <Col md={3}>
-          <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
-            <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://i.pinimg.com/736x/f8/8c/93/f88c9387ee7eb7d094feb28d96b1b471.jpg" alt="icon" style={{ width: '60px', height: '60px', marginRight: '20px' }} />
-              <div>
-                <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                  Upcoming Tours
-                </Card.Text>
-                <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
-                  75
-                </h3>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
+  {/* Upcoming Tours Card */}
+  <Col xs={12} sm={6} md={3}>
+    <Card className="text-center bg-light border rounded p-3 shadow card-hover">
+      <Card.Body className="d-flex align-items-center justify-content-center">
+        <img
+          src="https://i.pinimg.com/736x/f8/8c/93/f88c9387ee7eb7d094feb28d96b1b471.jpg"
+          alt="icon"
+          style={{ width: '60px', height: '60px', marginRight: '20px' }}
+        />
+        <div>
+          <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
+            Upcoming Tours
+          </Card.Text>
+          <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
+            75
+          </h3>
+        </div>
+      </Card.Body>
+    </Card>
+  </Col>
 
-        {/* New Card */}
-        <Col md={3}>
-          <Card className="text-center bg-light border rounded p-3 shadow card-hover" style={{ width: '300px', height: '150px' }}>
-            <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://i.pinimg.com/736x/85/03/b6/8503b63f0ee64478067d99a190cf19bf.jpg" alt="icon" style={{ width: '50px', height: '50px', marginRight: '25px' }} />
-              <div>
-                <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
-                  New Tours
-                </Card.Text>
-                <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
-                  50
-                </h3>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+  {/* New Tours Card */}
+  <Col xs={12} sm={6} md={3}>
+    <Card className="text-center bg-light border rounded p-3 shadow card-hover">
+      <Card.Body className="d-flex align-items-center justify-content-center">
+        <img
+          src="https://i.pinimg.com/736x/85/03/b6/8503b63f0ee64478067d99a190cf19bf.jpg"
+          alt="icon"
+          style={{ width: '50px', height: '50px', marginRight: '25px' }}
+        />
+        <div>
+          <Card.Text className="font-weight-bold text-secondary" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
+            New Tours
+          </Card.Text>
+          <h3 className="font-weight-bold text-primary" style={{ fontSize: '2rem' }}>
+            50
+          </h3>
+        </div>
+      </Card.Body>
+    </Card>
+  </Col>
+</Row>
 
       <Card>
         <Card.Body>

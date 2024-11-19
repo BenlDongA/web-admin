@@ -24,7 +24,7 @@ const [endDateFilter, setEndDateFilter] = useState(null);
     countryName: '', 
   });
   const [editingTripId, setEditingTripId] = useState(null);
-  const [priceRange, setPriceRange] = useState([0, 200]); // State for price range
+  const [priceRange, setPriceRange] = useState([0, 200]); 
   const [countryFilter, setCountryFilter] = useState(null);
 
   useEffect(() => {
@@ -89,10 +89,21 @@ const [endDateFilter, setEndDateFilter] = useState(null);
   
   const handleSubmit = (e) => {
     e.preventDefault();
+  
+    const selectedDate = new Date(formData.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Đặt thời gian về 0 để so sánh chính xác
+  
+    if (selectedDate < today) {
+      alert('The selected date cannot be in the past.');
+      return; // Ngăn submit
+    }
+  
     if (editingTripId) {
-      axios.put(`https://api-flutter-nper.onrender.com/api/trip/${editingTripId}`, formData)
+      axios
+        .put(`https://api-flutter-nper.onrender.com/api/trip/${editingTripId}`, formData)
         .then((response) => {
-          const updatedTrips = trips.map((trip) => 
+          const updatedTrips = trips.map((trip) =>
             trip._id === editingTripId ? response.data : trip
           );
           setTrips(updatedTrips);
@@ -101,9 +112,14 @@ const [endDateFilter, setEndDateFilter] = useState(null);
         })
         .catch((error) => {
           console.error("Error updating trip:", error.response || error.message);
+          alert(
+            error.response?.data?.message ||
+            "An error occurred while updating the trip."
+          );
         });
     } else {
-      axios.post('https://api-flutter-nper.onrender.com/api/trip', [formData])
+      axios
+        .post('https://api-flutter-nper.onrender.com/api/trip', [formData])
         .then((response) => {
           setTrips([...trips, response.data]);
           setShowModal(false);
@@ -111,10 +127,16 @@ const [endDateFilter, setEndDateFilter] = useState(null);
         })
         .catch((error) => {
           console.error("Error creating trip:", error.response || error.message);
-          alert(error.response?.data?.message || "An error occurred while creating the trip");
+          alert(
+            error.response?.data?.message ||
+            "An error occurred while creating the trip."
+          );
         });
     }
   };
+
+  
+  
 
   const handleEdit = (tripId) => {
     const tripToEdit = trips.find((trip) => trip._id === tripId);
@@ -155,51 +177,54 @@ const [endDateFilter, setEndDateFilter] = useState(null);
   const handlePriceRangeChange = (value) => setPriceRange(value);
   return (
     <Container>
-      <div className="d-flex justify-content-between mb-3 align-items-center">
-      <div>
-      <h5><FaFilterCircleDollar style={{marginRight:10}} />Filter by Price</h5>
-      <ReactSlider
-        className="slider"
-        thumbClassName="slider-thumb"
-        trackClassName="slider-track"
-        value={priceRange}
-        onChange={handlePriceRangeChange}
-        min={0}
-        max={200}
-        step={1}
-        renderTrack={(props, state) => {
-          // Tạo track cho từng phần: ngoài và giữa
-          const trackClass =
-            state.index === 1 ? "slider-track-middle" : "slider-track";
-          return <div {...props} className={trackClass} />;
-        }}
-      />
-      <div className="price-range-text">
-      <BsCashCoin style={{fontSize:20, fontWeight: 'bold'}}/> ${priceRange[0]} - ${priceRange[1]}
-      </div>
-    </div>
-    <div className="date-filter-container d-flex align-items-center">
-  <div className="me-3 d-flex align-items-center">
-    <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Start Date:</span>
-    <Form.Control
-      type="date"
-      value={startDateFilter || ''}
-      onChange={(e) => setStartDateFilter(e.target.value)}
-      style={{ maxWidth: '160px' }}
-    />
-  </div>
-  <div className="d-flex align-items-center">
-    <span style={{ fontWeight: 'bold', marginRight: '5px' }}>End Date:</span>
-    <Form.Control
-      type="date"
-      value={endDateFilter || ''}
-      onChange={(e) => setEndDateFilter(e.target.value)}
-      style={{ maxWidth: '160px' }}
-    />
-  </div>
-</div>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        {/* Filter by Price */}
+        <div className="me-3">
+          <h5><FaFilterCircleDollar style={{ marginRight: 10 }} /> Filter by Price</h5>
+          <ReactSlider
+            className="slider"
+            thumbClassName="slider-thumb"
+            trackClassName="slider-track"
+            value={priceRange}
+            onChange={handlePriceRangeChange}
+            min={0}
+            max={200}
+            step={1}
+            renderTrack={(props, state) => {
+              const trackClass =
+                state.index === 1 ? 'slider-track-middle' : 'slider-track';
+              return <div {...props} className={trackClass} />;
+            }}
+          />
+          <div className="price-range-text">
+            <BsCashCoin style={{ fontSize: 20, fontWeight: 'bold' }} /> ${priceRange[0]} - ${priceRange[1]}
+          </div>
+        </div>
 
+        {/* Date Filters */}
+        <div className="d-flex flex-wrap justify-content-between">
+          <div className="me-3 d-flex align-items-center">
+            <span style={{ fontWeight: 'bold', marginRight: '5px' }}>Start Date:</span>
+            <Form.Control
+              type="date"
+              value={startDateFilter || ''}
+              onChange={(e) => setStartDateFilter(e.target.value)}
+              style={{ maxWidth: '160px' }}
+            />
+          </div>
+          <div className="d-flex align-items-center">
+            <span style={{ fontWeight: 'bold', marginRight: '5px' }}>End Date:</span>
+            <Form.Control
+              type="date"
+              value={endDateFilter || ''}
+              onChange={(e) => setEndDateFilter(e.target.value)}
+              style={{ maxWidth: '160px' }}
+            />
+          </div>
+        </div>
 
+        {/* Country Filter */}
+        <div className="me-3" style={{ Width: '120%' }}>
         <Select
           options={countries}
           value={countries.find(option => option.value === countryFilter)}
@@ -218,14 +243,17 @@ const [endDateFilter, setEndDateFilter] = useState(null);
             }),
           }}
         />
+        </div>
+
+        {/* Create Trip Button */}
         <Button variant="success" onClick={handleCreateTrip}>
           <FaPlus className="me-2" /> Create Trip
         </Button>
       </div>
 
-      <Row>
+      <Row className="g-4">
         {filteredTrips.length > 0 ? filteredTrips.map((trip) => (
-          <Col md={4} key={trip._id}>
+          <Col lg={4} md={6} sm={12}  key={trip._id}>
             <TripCard
               tripId={trip._id}
               image={trip.avatar}
